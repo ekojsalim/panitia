@@ -20,25 +20,38 @@ class TicketStore {
   }
 
   async registerTicket(by, name="") {
-    const storageRef = storage.ref(this.ticketID).child("image");
-    await fetch(this.imageData)
-    .then(res => res.blob())
-    .then(blob =>
-        storageRef.put(blob).then(function(snapshot) {
+    if(this.imageData) {
+      const storageRef = storage.ref(this.ticketID).child("image");
+      await fetch(this.imageData)
+        .then(res => res.blob())
+        .then(blob =>
+          storageRef.put(blob).then(function(snapshot) {
             console.log("uploaded an image");
-        })
-    );
-    const imageUrl = await storageRef.getDownloadURL()
-    db.collection("tickets").doc(this.ticketID).set({
-      state: "Registered",
-      name,
-      imageUrl,
-      events: [{
-        event: "Registered",
-        timestamp: new Date(),
-        by
-      }]
-    });
+          })
+        );
+      const imageUrl = await storageRef.getDownloadURL()
+      db.collection("tickets").doc(this.ticketID).set({
+        state: "Registered",
+        name,
+        imageUrl,
+        events: [{
+          event: "Registered",
+          timestamp: new Date(),
+          by
+        }]
+      });
+    }
+    else {
+      db.collection("tickets").doc(this.ticketID).set({
+        state: "Registered",
+        name,
+        events: [{
+          event: "Registered",
+          timestamp: new Date(),
+          by
+        }]
+      });
+    }
   }
 
   markEnter(by) {

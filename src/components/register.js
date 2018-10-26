@@ -46,7 +46,7 @@ class RegisterMessage extends Component {
     message: "",
     openNameDialog: false,
     openCamera: false,
-    name: "",
+    name: "General Entrance",
     showOption: false,
     loading: false
   };
@@ -92,7 +92,7 @@ class RegisterMessage extends Component {
       <div>
         {this.state.loading && <Loading/>}
         {this.state.show && <SnackbarMessage message={this.state.message} />}
-        {this.state.showOption && <ConfirmationDialog dialogText="Is this a general entrance or closing ticket?" button1Text="Yes" button2Text="No" button1Handler={this.handleInput} button2Handler={this.openCamera} />}
+        {this.state.showOption && <ConfirmationDialog dialogText="Is this a general entrance ticket?" button1Text="Yes" button2Text="No" button1Handler={this.handleInput} button2Handler={this.openCamera} />}
         {this.state.openCamera &&
           <Card>
             <CardActionArea>
@@ -137,7 +137,7 @@ class RegisterMessage extends Component {
           <DialogTitle id="form-dialog-title">Input Name</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Please enter the ticket holder's name, you can leave this empty if this is a general entrance ticket
+              Please put in the participant's name
             </DialogContentText>
             <TextField
               autoFocus

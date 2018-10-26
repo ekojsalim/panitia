@@ -65,6 +65,11 @@ const LoadableDepositInfo = Loadable({
   loading: Loading
 });
 
+const LoadableCheckDeposit = Loadable({
+  loader: () => import("./components/checkdeposit"),
+  loading: Loading
+});
+
 const WithAuthenticationRoutes = withAuthentication(() => {
   return (
     <Switch>
@@ -78,6 +83,7 @@ const WithAuthenticationRoutes = withAuthentication(() => {
       <PrivateRoute path="/menu" component={LoadableMenu}/>
       <PrivateRoute path="/deposit" component={LoadableDeposit}/>
       <PrivateRoute path="/depositinfo" component={LoadableDepositInfo}/>
+      <PrivateRoute path="/checkdeposit" component={LoadableCheckDeposit}/>
       <PrivateRoute path="/withdraw" component={LoadableWithdraw}/>
       <PrivateRoute path="/list" component={LoadableList}/>
     </Switch>

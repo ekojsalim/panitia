@@ -33,12 +33,12 @@ class Dashboard extends Component {
                   </ListItemIcon>
                   <ListItemText inset primary="Scan" />
                 </ListItem>
-                <ListItem button component={Link} to="/list">
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
-                  <ListItemText inset primary="List Penitipan" />
-                </ListItem>
+                {/*<ListItem button component={Link} to="/list">*/}
+                  {/*<ListItemIcon>*/}
+                    {/*<ListIcon />*/}
+                  {/*</ListItemIcon>*/}
+                  {/*<ListItemText inset primary="List Penitipan" />*/}
+                {/*</ListItem>*/}
                 <ListItem button onClick={this.logout} to="/exit">
                   <ListItemIcon>
                     <MarkExit />

@@ -26,43 +26,43 @@ class InfoMessage extends Component {
     const { depositStore } = this.props;
     return (
       <Grid item>
-        <Grid container alignItems="center" justify="center">
-          <Grid item>
-            {depositStore.loaded ?
-              <Avatar src={depositStore.imageUrl} style={{width: "100%", height: "100%"}}/> :
-              <Avatar style={{width: "100px", height: "100px"}}>?</Avatar>
-            }
-          </Grid>
-        </Grid>
-        <Card className={this.props.classes.card}>
-          <CardContent>
-            <Typography variant="h5" gutterBottom>
-              Deposit Info
-            </Typography>
-            <Typography variant="body1">
-              Deposit ID: {depositStore.depositID}
-            </Typography>
-            <Typography variant="body1">
-              Owne: {depositStore.owner}
-            </Typography>
-          </CardContent>
-        </Card>
-        {
-          this.props.ticketStore.ticketData.events.map((e, i) => {
-            return (
-              <ExpansionPanel key={i}>
-                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography>{e.event}</Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  <Typography>
-                    by {e.by} {moment(e).fromNow()}
-                  </Typography>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-            );
-          })
-        }
+        {/*<Grid container alignItems="center" justify="center">*/}
+          {/*<Grid item>*/}
+            {/*{depositStore.loaded ?*/}
+              {/*<Avatar src={depositStore.imageUrl} style={{width: "100%", height: "100%"}}/> :*/}
+              {/*<Avatar style={{width: "100px", height: "100px"}}>?</Avatar>*/}
+            {/*}*/}
+          {/*</Grid>*/}
+        {/*</Grid>*/}
+        {/*<Card className={this.props.classes.card}>*/}
+          {/*<CardContent>*/}
+            {/*<Typography variant="h5" gutterBottom>*/}
+              {/*Deposit Info*/}
+            {/*</Typography>*/}
+            {/*<Typography variant="body1">*/}
+              {/*Deposit ID: {depositStore.depositID}*/}
+            {/*</Typography>*/}
+            {/*<Typography variant="body1">*/}
+              {/*Owne: {depositStore.owner}*/}
+            {/*</Typography>*/}
+          {/*</CardContent>*/}
+        {/*</Card>*/}
+        {/*{*/}
+          {/*this.props.ticketStore.ticketData.events.map((e, i) => {*/}
+            {/*return (*/}
+              {/*<ExpansionPanel key={i}>*/}
+                {/*<ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>*/}
+                  {/*<Typography>{e.event}</Typography>*/}
+                {/*</ExpansionPanelSummary>*/}
+                {/*<ExpansionPanelDetails>*/}
+                  {/*<Typography>*/}
+                    {/*by {e.by} {moment(e).fromNow()}*/}
+                  {/*</Typography>*/}
+                {/*</ExpansionPanelDetails>*/}
+              {/*</ExpansionPanel>*/}
+            {/*);*/}
+          {/*})*/}
+        {/*}*/}
       </Grid>
     );
   }

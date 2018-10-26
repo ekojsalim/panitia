@@ -28,8 +28,8 @@ class InfoMessage extends Component {
       <Grid item>
         <Grid container alignItems="center" justify="center">
           <Grid item>
-            {ticketStore.ticketData ?
-              <Avatar src={this.props.ticketStore.ticketData.imageUrl} style={{width: "100%", height: "100%"}}/> :
+            {ticketStore.ticketData.imageUrl ?
+              <img src={this.props.ticketStore.ticketData.imageUrl} style={{width: "100%", height: "100%"}}/> :
               <Avatar style={{width: "100px", height: "100px"}}>?</Avatar>
             }
           </Grid>
@@ -52,6 +52,7 @@ class InfoMessage extends Component {
         </Card>
         {
           this.props.ticketStore.ticketData.events.map((e, i) => {
+            console.log(e.timestamp.toDate());
             return (
               <ExpansionPanel key={i}>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -59,7 +60,7 @@ class InfoMessage extends Component {
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
                   <Typography>
-                    by {e.by} {moment(e).fromNow()}
+                    by {e.by} {moment(e.timestamp.toDate()).fromNow()}
                   </Typography>
                 </ExpansionPanelDetails>
               </ExpansionPanel>
