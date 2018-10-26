@@ -14,6 +14,7 @@ import Loading from "./loading";
 import CardActions from "@material-ui/core/CardActions/CardActions";
 import Button from "@material-ui/core/Button/Button";
 import SnackbarMessage from "./snackbar";
+import {Redirect} from "react-router-dom";
 
 
 const styles = {
@@ -43,54 +44,56 @@ class InfoMessage extends Component {
       <div>
         {this.state.loading ?
           <Loading/>
-          :
-          <Grid item>
-            {this.state.show ? <SnackbarMessage message={this.state.message}/> : ""}
-            <Grid container alignItems="center" justify="center">
-              <Grid item>
-                {ticketStore.ticketData ?
-                  <img src={currentDeposit.data.imageUrl} style={{width: "100%", height: "100%"}}/> :
-                  <Avatar style={{width: "100px", height: "100px"}}>?</Avatar>
-                }
+          : (<Grid item>
+              {this.state.show ? <SnackbarMessage message={this.state.message}/> : ""}
+              <Grid container alignItems="center" justify="center">
+                <Grid item>
+                  {currentDeposit.depositData ?
+                    <img src={currentDeposit.data.imageUrl} style={{width: "100%", height: "100%"}}/> :
+                    <Avatar style={{width: "100px", height: "100px"}}>?</Avatar>
+                  }
+                </Grid>
               </Grid>
+              <Card className={this.props.classes.card}>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom>
+                    Current Deposit
+                  </Typography>
+                  <Typography variant="body1">
+                    Deposit ID: {currentDeposit.id}
+                  </Typography>
+                  <Typography variant="body1">
+                    Owner: {currentDeposit.data.owner}
+                  </Typography>
+                  <Typography variant="body1" gutterBottom>
+                    Status: {currentDeposit.data.status}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button onClick={this.handleWithdraw} disabled={currentDeposit.data.status === "Withdrawed"}
+                          color="primary">Withdraw</Button>
+                </CardActions>
+              </Card>
+              {
+                currentDeposit.data.events.map((e, i) => {
+                  console.log(e.timestamp.toDate());
+                  return (
+                    <ExpansionPanel key={i}>
+                      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
+                        <Typography>{e.event}</Typography>
+                      </ExpansionPanelSummary>
+                      <ExpansionPanelDetails>
+                        <Typography>
+                          by {e.by} {moment(e.timestamp.toDate()).fromNow()}
+                        </Typography>
+                      </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                  );
+                })
+              }
             </Grid>
-            <Card className={this.props.classes.card}>
-              <CardContent>
-                <Typography variant="h5" gutterBottom>
-                  Current Deposit
-                </Typography>
-                <Typography variant="body1">
-                  Deposit ID: {currentDeposit.id}
-                </Typography>
-                <Typography variant="body1">
-                  Owner: {currentDeposit.data.owner}
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Status: {currentDeposit.data.status}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button onClick={this.handleWithdraw} disabled={currentDeposit.data.status === "Withdrawed"} color="primary">Withdraw</Button>
-              </CardActions>
-            </Card>
-            {
-              currentDeposit.data.events.map((e, i) => {
-                console.log(e.timestamp.toDate());
-                return (
-                  <ExpansionPanel key={i}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon/>}>
-                      <Typography>{e.event}</Typography>
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      <Typography>
-                        by {e.by} {moment(e.timestamp.toDate()).fromNow()}
-                      </Typography>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
-                );
-              })
-            }
-          </Grid>
+          )
+
         }
       </div>
     )
@@ -101,14 +104,25 @@ class InfoMessage extends Component {
 const StyledInfoMessage = withStyles(styles)(InfoMessage);
 
 class Info extends Component {
+  state = {
+    redirect: false
+  }
+
   componentDidMount() {
-    this.props.depositStore.load(this.props.ticketStore.ticketID);
+    this.props.depositStore.load(this.props.ticketStore.ticketID).then(() => {
+      if (!this.props.depositStore.depositData[0]) this.setState({redirect: true});
+    });
+  }
+
+  componentWillUnmount() {
+    this.props.depositStore.reset();
   }
 
   render() {
     const {ticketStore, depositStore} = this.props;
     return (
       <div style={{height: "100vh"}}>
+        {this.state.redirect && <Redirect to="/menu"/>}
         <Grid container alignItems="center" justify="center" style={{height: "100vh"}}>
           {
             depositStore.depositData && depositStore.loaded ?

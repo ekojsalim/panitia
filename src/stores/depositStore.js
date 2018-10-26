@@ -10,6 +10,11 @@ class DepositStore {
     return this.depositData && this.depositData[0];
   }
 
+  reset() {
+    this.depositData = null;
+    this.loaded = null;
+  }
+
   async setDeposit(imageUri, owner, by) {
     this.loaded = false;
     const getNumber = async () => {

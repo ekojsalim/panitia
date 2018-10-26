@@ -14,6 +14,9 @@ import {Link, Redirect} from "react-router-dom";
 import SnackbarMessage from "./snackbar";
 
 class Register extends Component {
+  componentWillUnmount() {
+    this.props.depositStore.reset();
+  }
   render() {
     const {ticketStore, authStore} = this.props;
     return (
@@ -33,7 +36,8 @@ class Register extends Component {
 class RegisterMessage extends Component {
   componentDidMount() {
     this.props.depositStore.load(this.props.ticketStore.ticketID).then(() => {
-      if(this.props.depositStore.depositData) this.setState({openCamera: false, hide: true, show: true, message: "This ticket holder has deposited before!"});
+      const z = this.props.depositStore.depositData;
+      if(z && z.length >= 1) this.setState({openCamera: false, hide: true, show: true, message: "This ticket holder has deposited before!"});
     });
   }
   state = {
