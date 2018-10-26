@@ -64,6 +64,7 @@ class TicketStore {
   }
 
   async loadTicket(id) {
+    this.loaded = false;
     this.loading = true;
     this.setID(id);
     const ticketData = await db.collection("tickets").doc(id).get();

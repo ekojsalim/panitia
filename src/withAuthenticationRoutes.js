@@ -40,6 +40,31 @@ const LoadableScanner = Loadable({
   loading: Loading
 });
 
+const LoadableMenu = Loadable({
+  loader: () => import("./components/menu"),
+  loading: Loading
+});
+
+const LoadableDeposit = Loadable({
+  loader: () => import("./components/deposit"),
+  loading: Loading
+});
+
+const LoadableWithdraw = Loadable({
+  loader: () => import("./components/withdraw"),
+  loading: Loading
+});
+
+const LoadableList = Loadable({
+  loader: () => import("./components/list"),
+  loading: Loading
+});
+
+const LoadableDepositInfo = Loadable({
+  loader: () => import("./components/depositinfo"),
+  loading: Loading
+});
+
 const WithAuthenticationRoutes = withAuthentication(() => {
   return (
     <Switch>
@@ -50,6 +75,11 @@ const WithAuthenticationRoutes = withAuthentication(() => {
       <PrivateRoute path="/enter" component={LoadableEnter}/>
       <PrivateRoute path="/exit" component={LoadableExit}/>
       <PrivateRoute path="/scanner" component={LoadableScanner}/>
+      <PrivateRoute path="/menu" component={LoadableMenu}/>
+      <PrivateRoute path="/deposit" component={LoadableDeposit}/>
+      <PrivateRoute path="/depositinfo" component={LoadableDepositInfo}/>
+      <PrivateRoute path="/withdraw" component={LoadableWithdraw}/>
+      <PrivateRoute path="/list" component={LoadableList}/>
     </Switch>
   );
 });

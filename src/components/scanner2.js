@@ -50,6 +50,9 @@ class NotRegisteredDialog extends Component {
 
 
 class Scanner extends Component {
+    componentDidMount() {
+        this.props.ticketStore.resetID();
+    }
     constructor(props) {
         super(props);
         this.state = {
@@ -59,7 +62,7 @@ class Scanner extends Component {
     }
     handleScan = (data) => {
         if (data) {
-            this.props.ticketStore.loadTicket(data);
+            this.props.ticketStore.setID(data);
             console.log(data);
             this.setState({
                 delay: false,
@@ -72,25 +75,22 @@ class Scanner extends Component {
     }
     render() {
         const { classes } = this.props;
-        let CameraStyle = {};
-        if (!this.props.show) {
-            CameraStyle.visibility = "hidden";
-            CameraStyle.width = 0;
-            CameraStyle.width = 0;
-        }
         return (
-            <Grid className={classes.scannerContainer} container justify={"center"} alignItems={"center"} style={CameraStyle}>
-            {this.state.toMenu && <Redirect to="/menu" />}
-                <Grid item xs={12} md={4}>
-                    (<QrReader
-                        style={CameraStyle}
-                        delay={this.state.delay}
-                        onError={this.handleError}
-                        onScan={this.handleScan}
-                        className={classes.scanner}
-                    />)
-        </Grid>
-            </Grid>
+            <div style={{ height: "100vh" }}>
+                <Grid container alignItems="center" justify="center" style={{ height: "100vh" }}>
+                    <Grid className={classes.scannerContainer} container justify={"center"} alignItems={"center"}>
+                        {this.state.toMenu && <Redirect to="/menu" />}
+                        <Grid item xs={12} md={4}>
+                            <QrReader
+                                delay={this.state.delay}
+                                onError={this.handleError}
+                                onScan={this.handleScan}
+                                className={classes.scanner}
+                            />
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </div>
         );
     }
 }

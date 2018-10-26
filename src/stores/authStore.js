@@ -1,4 +1,5 @@
 import {action, computed, observable, decorate} from "mobx";
+import {auth} from "../firebase/firebase";
 
 class AuthStore {
   authUserId = null;
@@ -18,6 +19,12 @@ class AuthStore {
     this.authUserName = authUser.displayName;
     this.authUserEmail = authUser.email;
   }
+  logout() {
+    this.authUserId = null;
+    this.authUserName = null;
+    this.authUserEmail = null;
+    auth.signOut();
+  }
 }
 
 decorate(AuthStore, {
@@ -26,7 +33,8 @@ decorate(AuthStore, {
   authUserEmail: observable,
   loggedIn: computed,
   dataComplete: computed,
-  setUser: action
+  setUser: action,
+  logout: action
 });
 
 export default new AuthStore();

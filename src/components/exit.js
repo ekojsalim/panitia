@@ -11,9 +11,6 @@ import SnackbarMessage from "./snackbar";
 import Loading from "./loading";
 
 class Exit extends Component {
-  componentWillUnmount() {
-    this.props.ticketStore.resetID();
-  }
   render() {
     const { ticketStore, authStore } = this.props;
     return (
@@ -21,7 +18,7 @@ class Exit extends Component {
         <Grid container alignItems="center" justify="center" style={{height: "100vh"}}>
         {
             ticketStore.ticketData && ticketStore.loaded ?
-              <ExitMessage ticketStore={ticketStore} /> :
+              <ExitMessage ticketStore={ticketStore} user={authStore.authUserEmail}/> :
               <Loading />
           }
           <Scanner show={!ticketStore.loaded && !ticketStore.loading}/>
@@ -40,6 +37,9 @@ class ExitMessage extends Component {
   handleMark = () => {
     if(this.props.ticketStore.ticketData.state === "Exited") {
       this.setState({show: true, message: "Ticket already exited before!"});
+    }
+    else if(this.props.ticketStore.ticketData.state === "Registered") {
+      this.setState({show: true, message: "Ticket has not entered Atrox area!"});
     }
     else {
       this.props.ticketStore.markExit(this.props.user);

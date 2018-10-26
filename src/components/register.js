@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Scanner from "./scanner";
 import { inject, observer } from "mobx-react";
 import { Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button/Button";
@@ -18,6 +17,7 @@ import Camera from 'react-html5-camera-photo';
 import 'react-html5-camera-photo/build/css/index.css';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import Slide from '@material-ui/core/Slide';
+import Loading from "./loading";
 
 
 function Transition(props) {
@@ -25,9 +25,6 @@ function Transition(props) {
 }
 
 class Register extends Component {
-  componentWillUnmount() {
-    this.props.ticketStore.resetID();
-  }
   render() {
     const { ticketStore, authStore } = this.props;
     return (
@@ -37,7 +34,6 @@ class Register extends Component {
             ticketStore.ticketID &&
             <RegisterMessage ticketStore={ticketStore} user={authStore.authUserEmail} />
           }
-          <Scanner show={!!!ticketStore.ticketID} />
         </Grid>
       </div>
     );
@@ -51,7 +47,8 @@ class RegisterMessage extends Component {
     openNameDialog: false,
     openCamera: false,
     name: "",
-    showOption: false
+    showOption: false,
+    loading: false
   };
 
   handleRegister = () => {
@@ -60,6 +57,7 @@ class RegisterMessage extends Component {
     }
     else {
       this.setState({ showOption: true });
+
     }
   };
 
@@ -68,8 +66,9 @@ class RegisterMessage extends Component {
   };
 
   handleInput = () => {
+    this.setState({loading: true, openNameDialog: false});
     this.props.ticketStore.registerTicket(this.props.user, this.state.name).then(() => {
-      this.setState({ show: true, message: "Ticket registered!", openDialog: false });
+      this.setState({ show: true, message: "Ticket registered!", openDialog: false, loading: false });
     });
   }
 
@@ -85,12 +84,13 @@ class RegisterMessage extends Component {
 
   onTakePhoto = (dataUri) => {
     this.props.ticketStore.setImage(dataUri);
-    this.handleInput();
+    this.setState({openNameDialog: true, openCamera: false});
   }
 
   render() {
     return (
       <div>
+        {this.state.loading && <Loading/>}
         {this.state.show && <SnackbarMessage message={this.state.message} />}
         {this.state.showOption && <ConfirmationDialog dialogText="Is this a general entrance or closing ticket?" button1Text="Yes" button2Text="No" button1Handler={this.handleInput} button2Handler={this.openCamera} />}
         {this.state.openCamera &&
@@ -114,7 +114,7 @@ class RegisterMessage extends Component {
               </CardContent>
             </CardActionArea>
           </Card>}
-        {!this.state.openCamera &&
+        {(!this.state.openCamera && !this.state.loading) &&
           <Card>
             <CardContent>
               <Typography variant="h5" gutterBottom>

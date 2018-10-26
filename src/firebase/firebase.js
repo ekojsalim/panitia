@@ -21,3 +21,4 @@ firebaseFirestore.settings({
 export default firebase;
 export const db = firebaseFirestore;
 export const storage = firebase.storage();
+export const auth = firebase.auth();

@@ -5,10 +5,12 @@ import {Switch} from "react-router-dom";
 import authStore from "./stores/authStore";
 import Loading from "./components/loading";
 import ticketStore from "./stores/ticketStore";
+import depositStore from "./stores/depositStore";
 
 const stores = {
   authStore,
-  ticketStore
+  ticketStore,
+  depositStore
 };
 
 const LoadableWithAuthenticationRoutes = Loadable({

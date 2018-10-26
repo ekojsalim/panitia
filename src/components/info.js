@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import Scanner from "./scanner";
 import { inject, observer } from "mobx-react";
-import { Typography } from "@material-ui/core";
+import { Typography, Avatar } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid/Grid";
 import Card from "@material-ui/core/Card/Card";
 import CardContent from "@material-ui/core/CardContent/CardContent";
@@ -17,14 +16,24 @@ import Loading from "./loading";
 const styles = {
   card: {
     minWidth: 275,
-    marginBottom: 10
+    marginBottom: 10,
+    marginTop: 20
   }
 };
 
 class InfoMessage extends Component {
   render() {
+    const { ticketStore } = this.props;
     return (
       <Grid item>
+        <Grid container alignItems="center" justify="center">
+          <Grid item>
+            {ticketStore.ticketData ?
+              <Avatar src={this.props.ticketStore.ticketData.imageUrl} style={{width: "100%", height: "100%"}}/> :
+              <Avatar style={{width: "100px", height: "100px"}}>?</Avatar>
+            }
+          </Grid>
+        </Grid>
         <Card className={this.props.classes.card}>
           <CardContent>
             <Typography variant="h5" gutterBottom>
@@ -39,10 +48,6 @@ class InfoMessage extends Component {
             <Typography variant="body1" gutterBottom>
               Status: {this.props.ticketStore.ticketData.state}
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              Image
-            </Typography>
-            <img src={this.props.ticketStore.ticketData.imageUrl} />
           </CardContent>
         </Card>
         {
@@ -69,8 +74,8 @@ class InfoMessage extends Component {
 const StyledInfoMessage = withStyles(styles)(InfoMessage);
 
 class Info extends Component {
-  componentWillUnmount() {
-    this.props.ticketStore.resetID();
+  componentDidMount() {
+    this.props.ticketStore.loadTicket(this.props.ticketStore.ticketID);
   }
   render() {
     const { ticketStore } = this.props;
@@ -82,7 +87,6 @@ class Info extends Component {
               <StyledInfoMessage ticketStore={ticketStore} /> :
               <Loading />
           }
-          <Scanner show={!ticketStore.loaded && !ticketStore.loading}/>
         </Grid>
       </div>
     );

@@ -28,7 +28,8 @@ const styles = {
 const uiConfig = {
   signInOptions: [
     {
-      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+      provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      requireDisplayName: true
     }
   ],
   credentialHelper: "none"
