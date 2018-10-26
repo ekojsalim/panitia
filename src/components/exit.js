@@ -8,6 +8,7 @@ import CardActions from "@material-ui/core/CardActions/CardActions";
 import CardContent from "@material-ui/core/CardContent/CardContent";
 import Card from "@material-ui/core/Card/Card";
 import SnackbarMessage from "./snackbar";
+import Loading from "./loading";
 
 class Exit extends Component {
   componentWillUnmount() {
@@ -18,11 +19,12 @@ class Exit extends Component {
     return (
       <div style={{height: "100vh"}}>
         <Grid container alignItems="center" justify="center" style={{height: "100vh"}}>
-          {
+        {
             ticketStore.ticketData && ticketStore.loaded ?
-              <ExitMessage ticketStore={ticketStore} user={authStore.authUserEmail}/>:
-              <Scanner/>
+              <ExitMessage ticketStore={ticketStore} /> :
+              <Loading />
           }
+          <Scanner show={!ticketStore.loaded && !ticketStore.loading}/>
         </Grid>
       </div>
     );
@@ -37,11 +39,11 @@ class ExitMessage extends Component {
 
   handleMark = () => {
     if(this.props.ticketStore.ticketData.state === "Exited") {
-      this.setState({show: true, message: "Ticket already entered before!"});
+      this.setState({show: true, message: "Ticket already exited before!"});
     }
     else {
       this.props.ticketStore.markExit(this.props.user);
-      this.setState({show: true, message: "Ticket marked as entered!"});
+      this.setState({show: true, message: "Ticket marked as exited!"});
     }
   };
   render() {
@@ -55,6 +57,9 @@ class ExitMessage extends Component {
             </Typography>
             <Typography>
               Ticket ID: {this.props.ticketStore.ticketID}
+            </Typography>
+            <Typography>
+              Name: {this.props.ticketStore.ticketData.name}
             </Typography>
           </CardContent>
           <CardActions>

@@ -35,6 +35,11 @@ const LoadableExit = Loadable({
   loading: Loading
 });
 
+const LoadableScanner = Loadable({
+  loader: () => import("./components/scanner2"),
+  loading: Loading
+});
+
 const WithAuthenticationRoutes = withAuthentication(() => {
   return (
     <Switch>
@@ -44,6 +49,7 @@ const WithAuthenticationRoutes = withAuthentication(() => {
       <PrivateRoute path="/register" component={LoadableRegister}/>
       <PrivateRoute path="/enter" component={LoadableEnter}/>
       <PrivateRoute path="/exit" component={LoadableExit}/>
+      <PrivateRoute path="/scanner" component={LoadableScanner}/>
     </Switch>
   );
 });

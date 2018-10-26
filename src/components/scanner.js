@@ -60,23 +60,30 @@ class Scanner extends Component {
     if (data) {
       this.props.ticketStore.loadTicket(data);
       console.log(data);
+      this.setState({delay: false})
     }
   }
   handleError(err) {
     console.error(err);
   }
   render() {
-    const {classes, ticketStore} = this.props;
+    const {classes, ticketStore, showScanner} = this.props;
+    let CameraStyle = {};
+    if(!this.props.show) {
+      CameraStyle.visibility = "hidden";
+      CameraStyle.width = 0;
+      CameraStyle.width = 0;
+    }
     return (
-      <Grid className={classes.scannerContainer} container justify={"center"} alignItems={"center"}>
+      <Grid className={classes.scannerContainer} container justify={"center"} alignItems={"center"} style={CameraStyle}>
         <Grid item xs={12} md={4}>
         {
-          (ticketStore.loaded && !ticketStore.data && !this.props.override) &&
+          (ticketStore.loaded && !ticketStore.ticketData) &&
           (<NotRegisteredDialog ticketStore={ticketStore}/>)
         }
         {
-          !ticketStore.loaded &&
           (<QrReader
+            style={CameraStyle}
             delay={this.state.delay}
             onError={this.handleError}
             onScan={this.handleScan}

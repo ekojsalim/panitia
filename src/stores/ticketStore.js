@@ -1,11 +1,13 @@
 import {action, observable, decorate} from "mobx";
-import {db} from "../firebase/firebase";
+import {db, storage} from "../firebase/firebase";
 import firebase from "../firebase/firebase";
 
 class TicketStore {
   ticketID = null;
   ticketData = null;
+  imageData = null;
   loaded = false;
+  loading = false;
 
   setID(id = null) {
     this.ticketID = id;
@@ -17,9 +19,20 @@ class TicketStore {
     this.loaded = false;
   }
 
-  registerTicket(by) {
+  async registerTicket(by, name="") {
+    const storageRef = storage.ref(this.ticketID).child("image");
+    await fetch(this.imageData)
+    .then(res => res.blob())
+    .then(blob =>
+        storageRef.put(blob).then(function(snapshot) {
+            console.log("uploaded an image");
+        })
+    );
+    const imageUrl = await storageRef.getDownloadURL()
     db.collection("tickets").doc(this.ticketID).set({
       state: "Registered",
+      name,
+      imageUrl,
       events: [{
         event: "Registered",
         timestamp: new Date(),
@@ -51,12 +64,18 @@ class TicketStore {
   }
 
   async loadTicket(id) {
+    this.loading = true;
     this.setID(id);
     const ticketData = await db.collection("tickets").doc(id).get();
-    if(ticketData.exists) {
+     if(ticketData.exists) {
       this.ticketData = ticketData.data();
     }
+    this.loading = false;
     this.loaded = true;
+  }
+
+  setImage(dataUri) {
+    this.imageData = dataUri;
   }
 
 }
@@ -64,13 +83,15 @@ class TicketStore {
 decorate(TicketStore, {
   ticketID: observable,
   ticketData: observable,
+  loading: observable,
   loaded: observable,
   setID: action,
   resetID: action,
   registerTicket: action,
   markEnter: action,
   loadTicket: action,
-  markExit: action
+  markExit: action,
+  setImage: action
 });
 
 export default new TicketStore();

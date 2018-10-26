@@ -8,6 +8,7 @@ import CardActions from "@material-ui/core/CardActions/CardActions";
 import CardContent from "@material-ui/core/CardContent/CardContent";
 import Card from "@material-ui/core/Card/Card";
 import SnackbarMessage from "./snackbar";
+import Loading from "./loading";
 
 class Enter extends Component {
   componentWillUnmount() {
@@ -18,11 +19,12 @@ class Enter extends Component {
     return (
       <div style={{height: "100vh"}}>
         <Grid container alignItems="center" justify="center" style={{height: "100vh"}}>
-          {
+        {
             ticketStore.ticketData && ticketStore.loaded ?
-              <EnterMessage ticketStore={ticketStore} user={authStore.authUserEmail}/>:
-              <Scanner/>
+              <EnterMessage ticketStore={ticketStore} /> :
+              <Loading />
           }
+          <Scanner show={!ticketStore.loaded && !ticketStore.loading}/>
         </Grid>
       </div>
     );
@@ -55,6 +57,9 @@ class EnterMessage extends Component {
             </Typography>
             <Typography>
               Ticket ID: {this.props.ticketStore.ticketID}
+            </Typography>
+            <Typography>
+              Name: {this.props.ticketStore.ticketData.name}
             </Typography>
           </CardContent>
           <CardActions>
